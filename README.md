@@ -1,8 +1,4 @@
 ![](https://framagit.org/luc/lufi/raw/master/themes/default/public/img/lufi128.png)
-![Build and Push](https://github.com/victor-rds/docker-lufi/workflows/Build%20and%20Push/badge.svg)
-
-## Tags available
-* latest, 0.05.1[(lufi/Dockerfile)](./Dockerfile)
 
 ## Description
 What is [lufi](https://framagit.org/luc/lufi) ?
@@ -21,18 +17,23 @@ Is that all? No. All the files are encrypted by the browser! It means that your 
 * GID : choose gid for launching lufi (default : 991)
 * WEBROOT : webroot of lufi (default : /)
 * SECRET : random string used to encrypt cookies (default : will be generated on the first run)
-* MAX_FILE_SIZE : maximum file size of an uploaded file in bytes (default : 10000000000)
-* CONTACT : Lufi isntance contact (default : contact@domain.tld)
+* MAX_FILE_SIZE : maximum file size of an uploaded file in bytes (default : 100 MB)
+* CONTACT : Lufi instance contact (default : contact@domain.tld)
 * REPORT : URL or an email address to receive file reports (default : report@domain.tld)
 * DEFAULT_DELAY : default time limit for files in days (default : 1 (0 for unlimited))
 * MAX_DELAY : number of days after which the files will be deleted (default : 0 for unlimited)
-* THEME : theme for lufi (default : default)
+* INSTANCE_NAME : name for the instance (default : Lufi)
+* THEME : theme for Lufi (default : default)
 * ALLOW_PWD_ON_FILES : enable download password (default : 1 (0 => disable, 1 => enable))
+* MAX_TOTAL_SIZE : maximum size of all files (default : 10 GB)
+* POLICY_WHEN_FULL : behaviour when maximum size reached (default : warn)
+* MAIL_HOST : send emails with SMTP host (default : smtp.example.org)
+* MAIL_SENDER : address to use as sender (default : no-reply@lufi.io)
 
 ### Volumes
-* /usr/lufi/lufi.conf : lufi's configuration file is here
-* /usr/lufi/data : lufi's database is here
-* /usr/lufi/files : Location of uploaded files
+* /usr/lufi/lufi.conf : Lufi's configuration file is here
+* /usr/lufi/data : Lufi's database is here
+* /usr/lufi/files : location of uploaded files
 
 ### Ports
 * 8081
@@ -40,7 +41,7 @@ Is that all? No. All the files are encrypted by the browser! It means that your 
 ## Usage
 ### Simple launch
 ```shell
-docker run -d -p 8081:8081 victorrds/lufi
+docker run -d -p 8081:8081 sbellon/lufi
 ```
 URI access : http://localhost:8081
 
@@ -55,9 +56,7 @@ docker run -d -p 8181:8081 \
     -e SECRET=$(date +%s | md5sum | head -c 32) \
     -e CONTACT=contact@mydomain.com \
     -e MAX_FILE_SIZE=250000000 \
-    victorrds/lufi
+    sbellon/lufi
 ```
 URI access : http://localhost:8181/lufi
 
-## Contributing
-Any contributions are very welcome !

@@ -1,17 +1,36 @@
 version: '3'
+
 services:
-    lufi:
-        image: victorrds/lufi
+    nginx-proxy:
+        image: 'jwilder/nginx-proxy:alpine'
+        restart: unless-stopped
+        ports:
+            - '${LUFI_PORT}:443'
         environment:
-            - CONTACT=your@contact.com
-            - MAX_DELAY=60
+            - DEFAULT_HOST=${NGINX_DEFAULT_HOST}
+            - HSTS=off
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+            - ${LUFI_HOST_DIR}/ssl:/etc/nginx/certs:ro
+
+    lufi:
+        image: 'sbellon/lufi'
+        restart: unless-stopped
         ports:
             - "8081:8081"
-        restart: always
+        environment:
+            - INSTANCE_NAME=${LUFI_INSTANCE_NAME}
+            - CONTACT=${LUFI_CONTACT}
+            - REPORT=${LUFI_REPORT}
+            - MAIL_HOST=${LUFI_MAIL_HOST}
+            - MAIL_SENDER=${LUFI_MAIL_SENDER}
+            - DEFAULT_DELAY=${LUFI_DEFAULT_DELAY}
+            - MAX_FILE_SIZE=${LUFI_MAX_FILE_SIZE}
+            - MAX_TOTAL_SIZE=${LUFI_MAX_TOTAL_SIZE}
+
+            # for jwilder/nginx-proxy
+            - VIRTUAL_HOST=${LUFI_VIRTUAL_HOST}
         volumes:
-            - db:/usr/lufi/data
-            - files:/usr/lufi/files
-        
-volumes:
-    db:
-    files:
+            - ${LUFI_HOST_DIR}/data:/usr/lufi/data
+            - ${LUFI_HOST_DIR}/files:/usr/lufi/files
+
