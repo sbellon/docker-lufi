@@ -15,6 +15,7 @@ services:
 
     lufi:
         image: 'sbellon/lufi'
+        build: .
         restart: unless-stopped
         ports:
             - "8081:8081"
