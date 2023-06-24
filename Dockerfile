@@ -49,6 +49,8 @@ COPY startup /usr/local/bin/startup
 COPY lufi.conf.template ${LUFI_DIR}/lufi.conf.template
 RUN chmod +x /usr/local/bin/startup
 
+USER ${UID}:${GID}
 HEALTHCHECK CMD curl --silent --head --fail http://127.0.0.1:8081/ || exit 1
+USER root:root
 
 CMD ["/usr/local/bin/startup"]
