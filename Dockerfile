@@ -34,9 +34,6 @@ RUN apk add --update --no-cache --virtual .build-deps \
     && cpan install Carton \
     && git clone -b ${LUFI_VERSION} https://framagit.org/fiat-tux/hat-softwares/lufi ${LUFI_DIR} \
     && cd ${LUFI_DIR} \
-    && sed -i -e "s/requires 'Mojolicious'.*/requires 'Mojolicious', '>= 8.05, < 9.11';/" cpanfile \
-    && rm cpanfile.snapshot \
-    && carton install --without=test --without=swift-storage --without=ldap --without=postgresql --without=mysql --without=htpasswd \
     && carton install --deployment --without=test --without=swift-storage --without=ldap --without=postgresql --without=mysql --without=htpasswd \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/* /root/.cpan* ${LUFI_DIR}/local/cache/*
