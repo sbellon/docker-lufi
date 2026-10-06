@@ -34,6 +34,11 @@ RUN apk add --update --no-cache --virtual .build-deps \
     && cpan install Carton \
     && git clone -b ${LUFI_VERSION} https://framagit.org/fiat-tux/hat-softwares/lufi ${LUFI_DIR} \
     && cd ${LUFI_DIR} \
+    && sed -i \
+       -e 's/^  EV-4\.34$/  EV-4.37/' \
+       -e 's#^    pathname: M/ML/MLEHMANN/EV-4\.34\.tar\.gz$#    pathname: M/ML/MLEHMANN/EV-4.37.tar.gz#' \
+       -e 's/^      EV 4\.34$/      EV 4.37/' \
+       cpanfile.snapshot \
     && carton install --deployment --without=test --without=swift-storage --without=ldap --without=postgresql --without=mysql --without=htpasswd \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/* /root/.cpan* ${LUFI_DIR}/local/cache/*
