@@ -1,24 +1,12 @@
 version: '3'
 
 services:
-    nginx-proxy:
-        image: 'jwilder/nginx-proxy:alpine'
-        restart: unless-stopped
-        ports:
-            - '${LUFI_PORT}:443'
-        environment:
-            - DEFAULT_HOST=${NGINX_DEFAULT_HOST}
-            - HSTS=off
-        volumes:
-            - /var/run/docker.sock:/tmp/docker.sock:ro
-            - ${LUFI_HOST_DIR}/ssl:/etc/nginx/certs:ro
-
     lufi:
         image: 'sbellon/lufi'
         build: .
         restart: unless-stopped
         ports:
-            - "8081:8081"
+            - "${LUFI_PORT}:8081"
         environment:
             - INSTANCE_NAME=${LUFI_INSTANCE_NAME}
             - CONTACT=${LUFI_CONTACT}
@@ -28,9 +16,6 @@ services:
             - DEFAULT_DELAY=${LUFI_DEFAULT_DELAY}
             - MAX_FILE_SIZE=${LUFI_MAX_FILE_SIZE}
             - MAX_TOTAL_SIZE=${LUFI_MAX_TOTAL_SIZE}
-
-            # for jwilder/nginx-proxy
-            - VIRTUAL_HOST=${LUFI_VIRTUAL_HOST}
         volumes:
             - ${LUFI_HOST_DIR}/data:/usr/lufi/data
             - ${LUFI_HOST_DIR}/files:/usr/lufi/files
